@@ -12,7 +12,7 @@
 
 % Title.
 % ------
-\title{Modulation Design in Amplify-and-Forward Two-Way Relay HARQ Network}
+\title{Modulation Design in Amplify-and-Forward Two-Way Relay HARQ Channel}
 %
 % Single address.
 % ---------------
@@ -45,19 +45,30 @@
 %
 \begin{abstract}
   % (what we do)
+  As a practical transmission enhancement technique for relay and HARQ system,
+  Modulation Diversity (MoDiv) uses distinct mappings to the same constellation
+  for different (re)transmissions. 
   % (how they do)
   % (how we do)
+  In this work, we study the MoDiv optimization
+  in a Amplify-and-Forward (AF) Two-Way Relay Channel (TWRC). The design of
+  MoDivto minimize the bit-error rate (BER) is formulated into a successive
+  Koopmans-Beckmann Quadratic Assignment Problem (QAP), which is solved
+  sequatially with a robust taboo search method.
   % (main results)
+  The performance gain of our MoDiv scheme over retransmission without remapping
+  and a heuristic MoDiv scheme is demonstrated with numerical ressults.
 \end{abstract}
 %
 \begin{keywords}
-  Modulation diversity, amplify-and-forward, two-way relay, HARQ, QAP
+  Modulation diversity, two-way relay, amplify-and-forward, HARQ, QAP
 \end{keywords}
 %
 \section{Introduction}
 \label{sec:intro}
 
-% Motivation: Two-way relay-HARQ MoDiv. HARQ first, then two-way relay
+% Motivation and literature review for Two-way relay-HARQ. HARQ first,
+% then two-way relay
 As an advanced technique to improve the robustness of high-rate wireless
 transmissions against poor channel conditions, Hybrid Automatic Repeat reQuest
 (HARQ) has found its application in various communication
@@ -75,21 +86,45 @@ and~\cite{xu2014diversity}, respectively. Related works about TWRC with ARQ
 for different relay schemes and retransmission policies can also be
 found in~\cite{popovski2007wireless, chen2012arq, guan2015twoway} and the references therein.
 
+% Literature review on MoDiv for HARQ-CC
 Apart from the naive Type-I HARQ and HARQ-IR, Type-I HARQ with maximal ratio
 combining (MRC), also known as HARQ-Chase Combining
-(HARQ-CC)~\cite{chase1985code}, is another practical HARQ
+(HARQ-CC)~\cite{chase1985code}, is another simple and practical HARQ
 scheme supported by such standands as HSPA~\cite{TS25.308},
 LTE~\cite{sesia2009lte} and so forth. As practical transmissions often admit
 linear modulations of finite-alphabet constellation (e.g. Q-ary QAM), the
 performance of HARQ-CC can be improved with Modulation Diversity
 (MoDiv)~\cite{benelli1992new}, in which a same group of $\log_2Q$ bits are
-mapped to different symbols in a same constellation in different round of (re)transmissions.
-
-% Literature Review on two-way relay, HARQ, and MoDiv
+mapped to different symbols in a same constellation in different round of
+(re)transmissions. MoDiv has been studied for
+HARQ~\cite{harvind2005symbol}, relay
+networks~\cite{seddik2008trans, khormuji2008rate} and relay-HARQ
+systems~\cite{kim2009design, ryu2011ber}.
 
 % What we are studying
+In this paper, we study the MoDiv design for the TWRC under a simple AF scheme
+and HARQ-CC protocol. We first derive an upper bound for the uncoded bit-error
+rate (BER) of TWRC-AF channel under the Rayleigh fading condition, given $M$
+different mapping schemes corresponding to each (re)transmission. Based on this
+upper bound, we formulate a successive BER minimization MoDiv design into a
+series of Quadratic Assignment Problem (QAP) in Koopmans-Beckmann (KB)
+form~\cite{koopmans1957assignment}. Although QAP is NP-hard, efficient numerical
+algorithms have been extensively researched~\cite{benlic2015memetic}, some of
+which have shown extremely high performance over
+QAPLIB~\cite{burkard1997qaplib}. We adopt a taboo search
+algorithm~\cite{taillard1991robust} to solve each QAP in our formulation. Moreover, the coefficients of QAP problem can be also be computed efficiently in a
+successive manner based on the solution to the preceding QAP problem. Our
+numerical results demonstrate significant BER reduction over both non-MoDiv and
+a simple heuristic MoDiv retransmission scheme for 16-QAM, 32-QAM and 64-QAM
+constellation, even under mismatching design parameters.
 
 % Structure of the manuscript
+The paper is organized as follows. Section~\ref{sec:model} introduces the
+TWRC-AF model and the HARQ protocol we are using. Section~\ref{sec:modiv}
+presents the successive BER minimization MoDiv design problem. In
+Section~\ref{sec:numerical}, we present the numerical results to show the
+performance gain of our MoDiv scheme. Finally, Section~\ref{sec:conclusion}
+concludes the paper.
 
 \section{System Model}
 \label{sec:model}
