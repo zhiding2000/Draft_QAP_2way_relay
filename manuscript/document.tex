@@ -57,7 +57,33 @@
 \section{Introduction}
 \label{sec:intro}
 
-% Motivation: Two-way relay-HARQ MoDiv
+% Motivation: Two-way relay-HARQ MoDiv. HARQ first, then two-way relay
+As an advanced technique to improve the robustness of high-rate wireless
+transmissions against poor channel conditions, Hybrid Automatic Repeat reQuest
+(HARQ) has found its application in various communication
+systems~\cite{cripriano2010overview}. HARQ works on both PHY layer and MAC
+sublayer to mitigate packet loss due to channel fading and
+link-adaptation accuracy. Recently, substantial research interest
+has been drawn to HARQ in Two-Way Relay Channel
+(TWRC) [2-4].
+In~\cite{iannello2009throughput}, the average throughput of naive Type-I HARQ
+policy for both Amplify and Forward (AF) and Decode and Forward (RF) TWRC schemes have
+been analyzed. The energy-delay tradeoff, and the diversity-multiplexing
+tradeoff of type-II HARQ policy, also known as full Incremental Redundancy (IR),
+for AF TWRC scheme have been studied in~\cite{choi2013energy}
+and~\cite{xu2014diversity}, respectively. Related works about TWRC with ARQ
+for different relay schemes and retransmission policies can also be
+found in~\cite{popovski2007wireless, chen2012arq, guan2015twoway} and the references therein.
+
+Apart from the naive Type-I HARQ and HARQ-IR, Type-I HARQ with maximal ratio
+combining (MRC), also known as HARQ-Chase Combining
+(HARQ-CC)~\cite{chase1985code}, is another practical HARQ
+scheme supported by such standands as HSPA~\cite{TS25.308},
+LTE~\cite{sesia2009lte} and so forth. As practical transmissions often admit
+linear modulations of finite-alphabet constellation (e.g. Q-ary QAM), the
+performance of HARQ-CC can be improved with Modulation Diversity
+(MoDiv)~\cite{benelli1992new}, in which a same group of $\log_2Q$ bits are
+mapped to different symbols in a same constellation in different round of (re)transmissions.
 
 % Literature Review on two-way relay, HARQ, and MoDiv
 
@@ -125,6 +151,6 @@
 % style file from IEEE produces unsorted bibliography list.
 % -------------------------------------------------------------------------
 \bibliographystyle{IEEEbib}
-\bibliography{refs}
+\bibliography{IEEEabrv,refs}
 
 \end{document}
