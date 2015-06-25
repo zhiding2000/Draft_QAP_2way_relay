@@ -4,6 +4,7 @@
 % --------------------------------------------------------------------------
 \documentclass{article}
 \usepackage{spconf,amsmath,graphicx}
+\usepackage{amsfonts}
 
 % Example definitions.
 % --------------------
@@ -128,11 +129,78 @@ concludes the paper.
 
 \section{System Model}
 \label{sec:model}
-% Two-way relay channel and HARQ protocol
 
-% Notations and the received signal model
+\begin{figure}[!t]
+  \centering
+  \includegraphics[width=2.0in]{./figs/model.eps}
+  \caption{Two-way relay channel with analog network coding.}
+  \label{fig:model}
+\end{figure}
 
-% The ML demodulator equation
+% Two-way relay channel
+Consider a TWRC with analog network coding (ANC) protocol~\cite{choi2013energy}, 
+a generalization the AF protocol, as shown in Fig.~\ref{fig:model}. the relay
+node $R$ is totally unaware of the HARQ procedure and simply performs ANC. Each round of ANC
+transmission is composed of two phases. In the multiple access (MAC) phase, the
+two source nodes $S_1$ and $S_2$ transmit to $R$ simultaneously. In the
+broadcast (BC) phase, $R$ amplify and broadcast the signal received during the
+MAC phase to both $S_1$ and $S_2$.
+Denote the uplink channel from $S_i$ to $R$ and downlink channel from $R$ to
+$S_i$ as $h_i$ and $g_i$, respectively, where $i=1,2$. We assume that all
+the channels follow Rayleigh distribution, i.e.
+$h_i\sim\mathcal{CN}(0,\beta_{h_i})$ and $g_i\sim\mathcal{CN}(0,\beta_{g_i})$,
+$i=1,2$. Denote the transmitted symbol from $S_i$ as $x_i$ whose average power
+$\mathbb{E}[|x_i|^2]=P_i$. Then the signal received by $R$ during the MAC phase
+is
+\begin{align}
+  y_R & = h_1x_1+h_2x_2+n_R,
+  \label{eq:y_R}
+\end{align}
+where $n_r\sim\mathcal{CN}(0,\sigma_R^2)$ is the received noise at $R$. Assuming
+that the relay $R$ has an expected power constraint of $P_R$, and that
+$S_1$ and $S_2$ perform perfect self-interference cancellation (SIC), then the
+received signal at $S_i$ after SIC is
+\begin{align}
+  y_i &= \alpha g_i y_R + n_i,\;i=1,2,
+  \label{eq:y_i}
+\end{align}
+where $n_i\sim\mathcal{CN}(0,\sigma_i^2)$ is the received noise at $S_i$, and
+\begin{align}
+  \alpha = \sqrt{\frac{P_R}{|h_1|^2P_1 + |h_2|^2P_2+P_R}}
+\end{align}
+is the power normalization factor at $R$.
+
+% HARQ protocol
+On top of this settings, $S_1$ and $S_2$ performs the HARQ-CC protocol
+in an unsynchronized manner. Consequently, the MoDiv design at $S_1$ and $S_2$
+can be handled independently. Without loss of generality, we study the HARQ
+transmission from $S_1$ to $S_2$. Denote $\mathcal{C}$ as the constellation used
+by $S_1$ whose cardinality equals $Q=|\mathcal{C}|$. As a convention, during the
+initial transmission of a packet, $S_1$ converts a bit sequence of length
+$\log_2Q$ into symbols with Gray mapping $\psi_0:\{0,\ldots,Q - 1\}\rightarrow
+\mathcal{C}$. The bit sequence is is labeled by its decimal equivalence $p\in
+\{0,\ldots,Q - 1\}$. What distinct HARQ-CC with MoDiv from conventional HARQ-CC
+is that, during the $m$-th retransmission, $S_1$ is allowed to use a
+mapping function $\psi_m\not=\psi_0$ to remap the same label $p$. We assume
+$m \leq M$ where $M$ is the maximum number of retransmissions. According to
+Eq.~(\ref{eq:y_R})(\ref{eq:y_i}), the signal received by $S_2$ after SIC during
+the $m$-th (re)transmission of $p$ is
+\begin{equation}
+  y_2^{(m)} = \alpha^{(m)} g_2^{(m)}h_1^{(m)}\psi_m[p] +
+  \alpha^{(m)} g_2^{(m)}n_R^{(m)} + n_2^{(m)},
+\end{equation}
+where $X^{(m)}$ is the $m$-th realization of random variable $X$.
+
+% ML detector
+Assume that $S_2$ acquires perfect channel state information
+(CSI). After the $m$-th retransmission, it attempts to demodulate the received symbols by
+identifying label $p$ with $y_2^{(0)},\ldots,y_2^{(m)}$ via the maximum
+likelihood (ML) detection:
+\begin{align}
+  p^* = \arg\min_p\sum_{j=0}^{m} \frac{|y_2^{(j)} -
+  \alpha^{(j)} g_2^{(j)} h_1^{(j)}\psi_j[p]|^2}
+  {\sigma_2^2+(\alpha^{(j)})^2\sigma_R^2|g_2^{(j)}|^2}.
+\end{align}
 
 \section{Successive Constellation Mapping Design For Modulation Diversity}
 \label{sec:modiv}
