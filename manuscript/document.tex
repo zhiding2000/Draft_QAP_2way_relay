@@ -200,15 +200,32 @@ likelihood (ML) detection:
   p^* = \arg\min_p\sum_{j=0}^{m} \frac{|y_2^{(j)} -
   \alpha^{(j)} g_2^{(j)} h_1^{(j)}\psi_j[p]|^2}
   {\sigma_2^2+(\alpha^{(j)})^2\sigma_R^2|g_2^{(j)}|^2}.
+  \label{eq:ml}
 \end{align}
 
 \section{Successive Constellation Mapping Design For Modulation Diversity}
 \label{sec:modiv}
 % Outline
+In this section, we first derive an approximated upper bound in closed form of
+the reception bit-error rate in our TWRC channel with HARQ-CC. Based on this
+result, we formulate the BER-minimization MoDiv design into a successive
+QAP.
 
-\subsection{A BER upperbound}
+\subsection{A BER upper bound}
 \label{ssec:ber}
 % The upper bound of BER using PEP
+Assume that the label $p$ follows a uniform distribution. The BER of
+the ML demodulator after the $m$-th retransmission can be upper-bounded and
+approximated with the pair-wise error probability
+(PEP)~\cite{harvind2005symbol}:
+\begin{align}
+  P_{BER}^{(m)} = \sum_{p=0}^{Q - 1}\sum_{q=0}^{Q - 1}\frac{B[p,
+  q]}{Q}P_{PEP}^{(m)}(q|p), \label{eq:P_BER}
+\end{align}
+where $B[p,q]$ represents the Hamming distance between the binary representation
+of $p$ and $q$ normalized by $\log_2Q$, and $P_{PEP}^{(m)}(q|p)$ is the
+probability that the ML demodulator prefer $q$ over $p$ conditioned on the
+transmission of $p$. From Eq.~(\ref{eq:ml}), we have
 
 % Recursion of the approximated PEP
 
