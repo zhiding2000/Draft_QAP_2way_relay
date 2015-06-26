@@ -5,6 +5,7 @@
 \documentclass{article}
 \usepackage{spconf,amsmath,graphicx}
 \usepackage{amsfonts}
+\usepackage{bm}
 
 % Example definitions.
 % --------------------
@@ -104,10 +105,10 @@ systems~\cite{kim2009design, ryu2011ber}.
 
 % What we are studying
 In this paper, we study the MoDiv design for the TWRC under a simple AF scheme
-and HARQ-CC protocol. We first derive an upper bound for the uncoded bit-error
+and HARQ-CC protocol. We first derive an approximation for the uncoded bit-error
 rate (BER) of TWRC-AF channel under the Rayleigh fading condition, given $M$
 different mapping schemes corresponding to each (re)transmission. Based on this
-upper bound, we formulate a successive BER minimization MoDiv design into a
+approximation, we formulate a successive BER minimization MoDiv design into a
 series of Quadratic Assignment Problem (QAP) in Koopmans-Beckmann (KB)
 form~\cite{koopmans1957assignment}. Although QAP is NP-hard, efficient numerical
 algorithms have been extensively researched~\cite{benlic2015memetic}, some of
@@ -206,18 +207,17 @@ likelihood (ML) detection:
 \section{Successive Constellation Mapping Design For Modulation Diversity}
 \label{sec:modiv}
 % Outline
-In this section, we first derive an approximated upper bound in closed form of
+In this section, we first derive an closed-form approximation of
 the reception bit-error rate in our TWRC channel with HARQ-CC. Based on this
 result, we formulate the BER-minimization MoDiv design into a successive
 QAP.
 
-\subsection{A BER upper bound}
+\subsection{A BER approximation}
 \label{ssec:ber}
-% The upper bound of BER using PEP
+% The approximation of BER using PEP
 Assume that the label $p$ follows a uniform distribution. The BER of
 the ML demodulator after the $m$-th retransmission can be upper-bounded and
-approximated with the pair-wise error probability
-(PEP)~\cite{harvind2005symbol}:
+approximated with the pair-wise error probability (PEP)~\cite{harvind2005symbol}:
 \begin{align}
   P_{BER}^{(m)} = \sum_{p=0}^{Q - 1}\sum_{q=0}^{Q - 1}\frac{B[p,
   q]}{Q}P_{PEP}^{(m)}(q|p), \label{eq:P_BER}
@@ -226,7 +226,30 @@ where $B[p,q]$ represents the Hamming distance between the binary representation
 of $p$ and $q$ normalized by $\log_2Q$, and $P_{PEP}^{(m)}(q|p)$ is the
 probability that the ML demodulator prefer $q$ over $p$ conditioned on the
 transmission of $p$. From Eq.~(\ref{eq:ml}), we have
-
+\begin{align}
+  P_{PEP}^{(m)}(q|p) = \mathbb{E}
+  \left[Q\left(\sqrt{\sum_{j=0}^m \frac{(\alpha^{(j)})^2\epsilon_j[p,q]
+  \gamma_2^{(j)} \delta_1^{(j)}} {2(\tilde{\sigma}_2^{(j)})^2}}\right)\right],
+  \label{eq:PEP_M}
+\end{align}
+where $\gamma_2^{(j)} = \|g_2^{(j)}\|^2$, $\delta_1^{(j)} = \|h_1^{(j)}\|^2$
+, $\epsilon_j[p,q] = \|\psi_j[p]-\psi_j[q]\|^2$, and $(\tilde{\sigma}_2^{(j)})^2
+= \sigma_2^2+(\alpha^{(j)})^2\sigma_R^2\gamma_2^{(j)}$ is the instantaneous
+variance of the noise received by $S_2$. By addopting the Chernoff upper bound
+$Q(x)\leq e^{-x^2/2}/2$~\cite{proakisdigital}, an approximation to
+$P_{PEP}^{(m)}(q|p)$ is
+\begin{align}
+  \tilde{P}_{PEP}^{(m)}(q|p) = \frac{1}{2}\prod_{j=0}^{m} \mathbb{E}
+  \left[\exp\left( 
+  -\frac{(\alpha^{(j)})^2\epsilon_j[p,q]\gamma_2^{(j)} \delta_1^{(j)}}
+  {4(\tilde{\sigma}_2^{(j)})^2}
+  \right)\right]
+\end{align}
+We note that although the Chernoff bound is a rather rough appoximation, it
+enables efficient iterative computation of $P_{PEP}^{(m)}(q|p)$ as $m$ varies,
+and its effectiveness is verified by the numerical results in
+Section~\ref{sec:numerical}. Nevertheless, a better approximation as in Eq.(14)
+of~\cite{chiani2003new} can be readily integrated into our framework.
 % Recursion of the approximated PEP
 
 \subsection{The Successive Quadratic Assignment Problem}
