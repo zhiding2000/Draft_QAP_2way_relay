@@ -6,6 +6,8 @@
 \usepackage{spconf,amsmath,graphicx}
 \usepackage{amsfonts}
 \usepackage{bm}
+\usepackage{amsthm}
+\newtheorem{proposition}{Proposition}
 
 % Example definitions.
 % --------------------
@@ -146,12 +148,12 @@ transmission is composed of two phases. In the multiple access (MAC) phase, the
 two source nodes $S_1$ and $S_2$ transmit to $R$ simultaneously. In the
 broadcast (BC) phase, $R$ amplify and broadcast the signal received during the
 MAC phase to both $S_1$ and $S_2$.
-Denote the uplink channel from $S_i$ to $R$ and downlink channel from $R$ to
-$S_i$ as $h_i$ and $g_i$, respectively, where $i=1,2$. We assume that all
+Denote the uplink channel from $S_s$ to $R$ and downlink channel from $R$ to
+$S_s$ as $h_s$ and $g_s$, respectively, where $s=1,2$. We assume that all
 the channels follow Rayleigh distribution, i.e.
-$h_i\sim\mathcal{CN}(0,\beta_{h_i})$ and $g_i\sim\mathcal{CN}(0,\beta_{g_i})$,
-$i=1,2$. Denote the transmitted symbol from $S_i$ as $x_i$ whose average power
-$\mathbb{E}[|x_i|^2]=P_i$. Then the signal received by $R$ during the MAC phase
+$h_s\sim\mathcal{CN}(0,\beta_{h_s})$ and $g_s\sim\mathcal{CN}(0,\beta_{g_s})$,
+$s=1,2$. Denote the transmitted symbol from $S_s$ as $x_s$ whose average power
+$\mathbb{E}[|x_s|^2]=P_s$. Then the signal received by $R$ during the MAC phase
 is
 \begin{align}
   y_R & = h_1x_1+h_2x_2+n_R,
@@ -160,12 +162,12 @@ is
 where $n_r\sim\mathcal{CN}(0,\sigma_R^2)$ is the received noise at $R$. Assuming
 that the relay $R$ has an expected power constraint of $P_R$, and that
 $S_1$ and $S_2$ perform perfect self-interference cancellation (SIC), then the
-received signal at $S_i$ after SIC is
+received signal at $S_s$ after SIC is
 \begin{align}
-  y_i &= \alpha g_i y_R + n_i,\;i=1,2,
-  \label{eq:y_i}
+  y_s &= \alpha g_s y_R + n_s,\;s=1,2,
+  \label{eq:y_s}
 \end{align}
-where $n_i\sim\mathcal{CN}(0,\sigma_i^2)$ is the received noise at $S_i$, and
+where $n_s\sim\mathcal{CN}(0,\sigma_s^2)$ is the received noise at $S_s$, and
 \begin{align}
   \alpha = \sqrt{\frac{P_R}{|h_1|^2P_1 + |h_2|^2P_2+P_R}}
 \end{align}
@@ -184,7 +186,7 @@ $\log_2Q$ into symbols with Gray mapping $\psi_0:\{0,\ldots,Q - 1\}\rightarrow
 is that, during the $m$-th retransmission, $S_1$ is allowed to use a
 mapping function $\psi_m\not=\psi_0$ to remap the same label $p$. We assume
 $m \leq M$ where $M$ is the maximum number of retransmissions. According to
-Eq.~(\ref{eq:y_R})(\ref{eq:y_i}), the signal received by $S_2$ after SIC during
+Eq.~(\ref{eq:y_R})(\ref{eq:y_s}), the signal received by $S_2$ after SIC during
 the $m$-th (re)transmission of $p$ is
 \begin{equation}
   y_2^{(m)} = \alpha^{(m)} g_2^{(m)}h_1^{(m)}\psi_m[p] +
@@ -198,9 +200,9 @@ Assume that $S_2$ acquires perfect channel state information
 identifying label $p$ with $y_2^{(0)},\ldots,y_2^{(m)}$ via the maximum
 likelihood (ML) detection:
 \begin{align}
-  p^* = \arg\min_p\sum_{j=0}^{m} \frac{|y_2^{(j)} -
-  \alpha^{(j)} g_2^{(j)} h_1^{(j)}\psi_j[p]|^2}
-  {\sigma_2^2+(\alpha^{(j)})^2\sigma_R^2|g_2^{(j)}|^2}.
+  p^* = \arg\min_p\sum_{k=0}^{m} \frac{|y_2^{(k)} -
+  \alpha^{(k)} g_2^{(k)} h_1^{(k)}\psi_k[p]|^2}
+  {\sigma_2^2+(\alpha^{(k)})^2\sigma_R^2|g_2^{(k)}|^2}.
   \label{eq:ml}
 \end{align}
 
@@ -210,7 +212,7 @@ likelihood (ML) detection:
 In this section, we first derive an closed-form approximation of
 the reception bit-error rate in our TWRC channel with HARQ-CC. Based on this
 result, we formulate the BER-minimization MoDiv design into a successive
-QAP.
+QAP (S-QAP).
 
 \subsection{A BER approximation}
 \label{ssec:ber}
@@ -228,40 +230,134 @@ probability that the ML demodulator prefer $q$ over $p$ conditioned on the
 transmission of $p$. From Eq.~(\ref{eq:ml}), we have
 \begin{align}
   P_{PEP}^{(m)}(q|p) = \mathbb{E}
-  \left[Q\left(\sqrt{\sum_{j=0}^m \frac{(\alpha^{(j)})^2\epsilon_j[p,q]
-  \gamma_2^{(j)} \delta_1^{(j)}} {2(\tilde{\sigma}_2^{(j)})^2}}\right)\right],
-  \label{eq:PEP_M}
+  \left[Q\left(\sqrt{\sum_{k=0}^m \frac{(\alpha^{(k)})^2\epsilon_k[p,q]
+  \gamma_2^{(k)} \delta_1^{(k)}} {2(\tilde{\sigma}_2^{(k)})^2}}\right)\right],
+  \label{eq:PEP_m}
 \end{align}
-where $\gamma_2^{(j)} = \|g_2^{(j)}\|^2$, $\delta_1^{(j)} = \|h_1^{(j)}\|^2$
-, $\epsilon_j[p,q] = \|\psi_j[p]-\psi_j[q]\|^2$, and $(\tilde{\sigma}_2^{(j)})^2
-= \sigma_2^2+(\alpha^{(j)})^2\sigma_R^2\gamma_2^{(j)}$ is the instantaneous
+where $\gamma_2^{(k)} = \|g_2^{(k)}\|^2$, $\delta_1^{(k)} = \|h_1^{(k)}\|^2$
+, $\epsilon_k[p,q] = \|\psi_k[p]-\psi_k[q]\|^2$, and $(\tilde{\sigma}_2^{(k)})^2
+= \sigma_2^2+(\alpha^{(k)})^2\sigma_R^2\gamma_2^{(k)}$ is the instantaneous
 variance of the noise received by $S_2$. By addopting the Chernoff upper bound
 $Q(x)\leq e^{-x^2/2}/2$~\cite{proakisdigital}, an approximation to
 $P_{PEP}^{(m)}(q|p)$ is
 \begin{align}
-  \tilde{P}_{PEP}^{(m)}(q|p) = \frac{1}{2}\prod_{j=0}^{m} \mathbb{E}
+  \tilde{P}_{PEP}^{(m)}(q|p) = \frac{1}{2}\prod_{k=0}^{m} \mathbb{E}
   \left[\exp\left( 
-  -\frac{(\alpha^{(j)})^2\epsilon_j[p,q]\gamma_2^{(j)} \delta_1^{(j)}}
-  {4(\tilde{\sigma}_2^{(j)})^2}
-  \right)\right]
+  -\frac{(\alpha^{(k)})^2\epsilon_k[p,q]\gamma_2^{(k)} \delta_1^{(k)}}
+  {4(\tilde{\sigma}_2^{(k)})^2}
+  \right)\right].
+  \label{eq:PEP_m_approx}
 \end{align}
-We note that although the Chernoff bound is a rather rough appoximation, it
+Although the Chernoff bound is a rather rough appoximation, it
 enables efficient iterative computation of $P_{PEP}^{(m)}(q|p)$ as $m$ varies,
 and its effectiveness is verified by the numerical results in
 Section~\ref{sec:numerical}. Nevertheless, a better approximation as in Eq.(14)
 of~\cite{chiani2003new} can be readily integrated into our framework.
+
+Denote $E_k[p,q]$ as the expectation in Eq.(\ref{eq:PEP_m_approx}), which can be
+evaluated as follows:
+\begin{proposition}
+  An approximation to $E_k[p,q]$ is
+  \begin{align}
+    \tilde{E}_k[p,q] = \frac{4\sigma_R^2
+    + \beta_{h_1}\epsilon_k[p,q]v\exp(v)Ei(v)}{u}
+    \label{eq:E_k}
+  \end{align}
+  where
+  \begin{subequations}
+    \begin{align}
+      u & = 4\sigma_R^2 + \beta_{h_1}\epsilon_k[p,q],\\
+      v & =
+      \frac{4\sigma_2^2}{\tilde{\alpha}^2\beta_{g_2}u}, \\
+      \tilde{\alpha} & = \sqrt{\frac{P_R}{\beta_{h_1}P_1 + \beta_{h_2}P_2+P_R}},
+    \end{align}
+  \end{subequations}
+  and $Ei(x) = \int_x^\infty e^{-t}/tdt$ is the exponential integral
+  function~\cite{zwillinger2014table}. 
+  \label{prop:E_k}
+\end{proposition}
+\begin{proof}
+  See Appendix.
+\end{proof}
 % Recursion of the approximated PEP
 
 \subsection{The Successive Quadratic Assignment Problem}
 \label{ssec:qap}
-% BER minimization
-
 % Approximated BER minimization
+Our MoDiv design is based on the approximated BER minimization criterion. As it
+is impossible to know the number of actual retransmission $m$ in advance, we
+formulate a sequence of $M$ optimization problems as
+in~\cite{harvind2005symbol}, in which $\psi_m$ is optimized to minimize the
+approximated BER given $\psi_1,\ldots,\psi_{m-1}$ without expecting future retransmissions. The
+\begin{align}
+  \min_{\psi^{(m)}|\psi^{(k)},k=0,\ldots,m-1}\tilde{P}_{BER}^{(m)},\,m=1,\ldots,M
+  \label{eq:core}
+\end{align}
+where $\tilde{P}_{BER}^{(m)}$ denotes the approximated version of
+Eq.(\ref{eq:P_BER}) evaluated with Eq.(\ref{eq:PEP_m_approx})(\ref{eq:E_k}).
 
 % Successively approximated BER minimization in SQAP form
+In order to rewrite Eq.(\ref{eq:core}) into a S-QAP formulation, we
+denote $\mathbf{x}^{(m)} = \{x_{pi}^{(m)}|p,i=0,\ldots,Q-1\}$ as the
+permutation matrix representing $\psi_m$:
+\begin{align}
+  x_{pi}^{(m)} = \left\{\begin{array}{ll}
+        1,& \mbox{if $\psi_m[p] = \psi_0[i]$}\\
+        0,& \mbox{otherwise.} 
+   \end{array} \right.
+\end{align}
+Denote the constraint sets
+\begin{subequations}
+  \begin{align}
+    \mathcal{P} & = \left\{\mathbf{x}:\,\sum_{p=0}^{Q-1}x_{pi} = 1,
+    x_{pi}\in\{0, 1\}\right\}, \\
+    \mathcal{I} & = \left\{\mathbf{x}:\,\sum_{i=0}^{Q-1}x_{pi} = 1,
+    x_{pi}\in\{0, 1\}\right\}. 
+    \label{eq:constraint}
+  \end{align}
+\end{subequations}
+Then the MoDiv design problems in Eq.(\ref{eq:core}) can be formulated into a
+S-QAP as follows:
+\begin{subequations}
+  \begin{align}
+    & \min_{\mathbf{x}^{(m)}}\sum_{p=0}^{Q-1}\sum_{i=0}^{Q-1}
+    \sum_{q=0}^{Q-1}\sum_{j=0}^{Q-1}f_{pq}^{(m)}d_{ij}x_{pi}^{(m)}x_{qj}^{(m)},
+    \label{eq:SQAP}\\
+    & \mbox{s.t. } \mathbf{x}^{(m)}\in \mathcal{P}\cap\mathcal{I}. \notag
+  \end{align}
+\end{subequations}
+in which the ``flow'' matrix $f_{pq}^{(m)}$ and the ``distance'' matrix $d_{ij}$
+are defined as
+\begin{subequations}
+  \begin{align}
+    f_{pq}^{(m)} & = \frac{B[p,q]}{Q}\tilde{P}_{PEP}^{(m-1)}(q|p) \\
+    d_{ij}  & = \tilde{E}_0[i,j]
+  \end{align}
+\end{subequations}
+Note that here we assume all channel and noises to be stationary across all
+retransmissions, so $d_{ij}$ only needs to be evaluated once. On the other hand,
+$f_{pq}^{(m)}$ can be computed recursively along solving the S-QAP, since
+\begin{subequations}
+  \begin{align}
+    \tilde{P}_{PEP}^{(m)}(q|p) & = \sum_{i=0}^{Q-1}
+    \sum_{j=0}^{Q-1}\tilde{P}_{PEP}^{(m-1)}(q|p)d_{ij}\hat{x}_{pi}^{(m)}\hat{x}_{qj}^{(m)}
+    \\
+    \tilde{P}_{PEP}^{(-1)}(q|p) & = \frac{1}{2}
+  \end{align}
+\end{subequations}
+where $\hat{\mathbf{x}}^{(m)}$ is the solution to Eq.(\ref{eq:SQAP}). 
 
 % Solution via Tabu search
-
+Compared to the general-form QAP as in~\cite{harvind2005symbol}, each KB-form
+QAP is defined with two $Q$-by-$Q$ matrices instead of one $Q^4$ 4-dimensional
+matrix, and only one of the two matrices needs to be updated. The overall
+computational complexity is greatly reduced, therefore
+much larger constellation can be handled in this case
+than~\cite{harvind2005symbol}. Since the MoDiv design depends only on statstical
+CSI, the QAP problems are solved off-line with an efficient robust taboo search
+algorithm~\cite{taillard1991robust}. We note that other numerical
+approaches to the KB-form QAP are also available, including simulated
+anneling (SA)~\cite{}, and so forth.
 
 \section{Numerical Results}
 \label{sec:numerical}
@@ -278,6 +374,33 @@ of~\cite{chiani2003new} can be readily integrated into our framework.
 
 \section{Conclusion}
 \label{sec:conclusion}
+
+\section{Appendix: Proof of Proposition 1}
+\label{sec:append}
+The proof of Proposition~\ref{prop:E_k} is generally based on Eq.(43)
+of~\cite{han2009performance}. Firstly, by adopting the heuristic approximation
+in~\cite{jing2006distributed}, the random variable $\alpha^{(k)}$ is replaced
+with constant $\tilde{\alpha}$ in $E_k[p, q]$, then we have
+\begin{align}
+  E_k[p, q] & \approx \mathbb{E}_{\gamma_2}
+  \left[
+  \mathbb{E}_{\delta_1|\gamma_2}
+  \left[
+  \exp\left(
+  -\frac{\tilde{\alpha}^2\epsilon_k[p,q]\gamma_2 \delta_1}
+  {4(\sigma_2^2+\tilde{\alpha}^2\sigma_R^2\gamma_2)}
+  \right)
+  \right]
+  \right] \notag \\
+  & = \mathbb{E}_{\gamma_2}
+  \left[
+  \left(1 + \frac{\tilde{\alpha}^2\epsilon_k[p,q]\beta_{h_1}\gamma_2 }
+  {4(\sigma_2^2+\tilde{\alpha}^2\sigma_R^2\gamma_2)}\right)^{-1}
+  \right].
+\end{align}
+As $\delta_1,\gamma_2$ both follow exponential distribution,
+Eq.(\ref{eq:E_k}) is derived by evaluating the above expectation with Eq.(3.352.4)
+of~\cite{zwillinger2014table}.
 
 
 
