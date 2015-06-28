@@ -249,10 +249,12 @@ $P_{PEP}^{(m)}(q|p)$ is
   \label{eq:PEP_m_approx}
 \end{align}
 Although the Chernoff bound is a rather rough appoximation, it
-enables efficient iterative computation of $P_{PEP}^{(m)}(q|p)$ as $m$ varies,
-and its effectiveness is verified by the numerical results in
-Section~\ref{sec:numerical}. Nevertheless, a better approximation as in Eq.(14)
-of~\cite{chiani2003new} can be readily integrated into our framework.
+enables efficient iterative computation of $P_{PEP}^{(m)}(q|p)$ as $m$ varies.
+Moreover, as shown in Section~\ref{ssec:qap}, this approximation results in a
+simple KB-form QAP. Nevertheless, the Chernoff bound can be replaced
+with a more accurate approximation as in Eq.(14) of~\cite{chiani2003new},
+As will be explained in Section~\ref{ssec:qap}, however, this will lead to a
+more complex general-form QAP.
 
 Denote $E_k[p,q]$ as the expectation in Eq.(\ref{eq:PEP_m_approx}), which can be
 evaluated as follows:
@@ -348,16 +350,19 @@ $f_{pq}^{(m)}$ can be computed recursively along solving the S-QAP, since
 where $\hat{\mathbf{x}}^{(m)}$ is the solution to Eq.(\ref{eq:SQAP}). 
 
 % Solution via Tabu search
-Compared to the general-form QAP as in~\cite{harvind2005symbol}, each KB-form
-QAP is defined with two $Q$-by-$Q$ matrices instead of one $Q^4$ 4-dimensional
-matrix, and only one of the two matrices needs to be updated. The overall
-computational complexity is greatly reduced, therefore
-much larger constellation can be handled in this case
-than~\cite{harvind2005symbol}. Since the MoDiv design depends only on statstical
-CSI, the QAP problems are solved off-line with an efficient robust taboo search
-algorithm~\cite{taillard1991robust}. We note that other numerical
-approaches to the KB-form QAP are also available, including simulated
-anneling (SA)~\cite{}, and so forth.
+In our S-QAP fromulation, each KB-form QAP is defined with two $Q$-by-$Q$
+matrices, and only one of them needs to be updated. Should we adopt the more
+accurate approximation~\cite{chiani2003new} in Eq.(\ref{eq:PEP_m}), each QAP
+would be in general-form which is defined with one $Q^4$ matrix. Although this
+4-dimensional matrix can still be updated iteratively using a few
+$Q$-by-$Q$ matrices in a sequential manner, the solution to the general-form QAP
+is ususally more complicated. With the S-QAP in KB form, we are able
+to handle much larger constellation with an efficient robust taboo search
+algorithm~\cite{taillard1991robust}. Other numerical approaches to
+solve KB-QAP include simulated anneling (SA)~\cite{connolly1990improved},
+ant-colony~\cite{gambardella1999ant} and so forth. Finally, we note that the
+MoDiv design can be precomputed offline and stored in $S_1$ and $S_2$ as it
+depends only on statistical CSI.
 
 \section{Numerical Results}
 \label{sec:numerical}
@@ -410,7 +415,7 @@ of~\cite{zwillinger2014table}.
 %\vfill
 %\pagebreak
 
-\vfill\pagebreak
+%\vfill\pagebreak
 
 % References should be produced using the bibtex program from suitable
 % BiBTeX files (here: strings, refs, manuals). The IEEEbib.bst bibliography
