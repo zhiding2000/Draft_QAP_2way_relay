@@ -159,7 +159,7 @@ is
   y_R & = h_1x_1+h_2x_2+n_R,
   \label{eq:y_R}
 \end{align}
-where $n_r\sim\mathcal{CN}(0,\sigma_R^2)$ is the received noise at $R$. Assuming
+where $n_R\sim\mathcal{CN}(0,\sigma_R^2)$ is the received noise at $R$. Assuming
 that the relay $R$ has an expected power constraint of $P_R$, and that
 $S_1$ and $S_2$ perform perfect self-interference cancellation (SIC), then the
 received signal at $S_s$ after SIC is
@@ -169,7 +169,7 @@ received signal at $S_s$ after SIC is
 \end{align}
 where $n_s\sim\mathcal{CN}(0,\sigma_s^2)$ is the received noise at $S_s$, and
 \begin{align}
-  \alpha = \sqrt{\frac{P_R}{|h_1|^2P_1 + |h_2|^2P_2+P_R}}
+  \alpha = \sqrt{\frac{P_R}{|h_1|^2P_1 + |h_2|^2P_2+\sigma_R^2}}
 \end{align}
 is the power normalization factor at $R$.
 
@@ -271,7 +271,7 @@ evaluated as follows:
       u & = 4\sigma_R^2 + \beta_{h_1}\epsilon_k[p,q],\\
       v & =
       \frac{4\sigma_2^2}{\tilde{\alpha}^2\beta_{g_2}u}, \\
-      \tilde{\alpha} & = \sqrt{\frac{P_R}{\beta_{h_1}P_1 + \beta_{h_2}P_2+P_R}},
+      \tilde{\alpha} & = \sqrt{\frac{P_R}{\beta_{h_1}P_1 + \beta_{h_2}P_2+\sigma_R^2}},
     \end{align}
   \end{subequations}
   and $Ei(x) = \int_x^\infty e^{-t}/tdt$ is the exponential integral
@@ -320,14 +320,12 @@ Denote the constraint sets
 \end{subequations}
 Then the MoDiv design problems in Eq.(\ref{eq:core}) can be formulated into a
 S-QAP as follows:
-\begin{subequations}
-  \begin{align}
-    & \min_{\mathbf{x}^{(m)}}\sum_{p=0}^{Q-1}\sum_{i=0}^{Q-1}
-    \sum_{q=0}^{Q-1}\sum_{j=0}^{Q-1}f_{pq}^{(m)}d_{ij}x_{pi}^{(m)}x_{qj}^{(m)},
-    \label{eq:SQAP}\\
-    & \mbox{s.t. } \mathbf{x}^{(m)}\in \mathcal{P}\cap\mathcal{I}. \notag
-  \end{align}
-\end{subequations}
+\begin{align}
+  & \min_{\mathbf{x}^{(m)}}\sum_{p=0}^{Q-1}\sum_{i=0}^{Q-1}
+  \sum_{q=0}^{Q-1}\sum_{j=0}^{Q-1}f_{pq}^{(m)}d_{ij}x_{pi}^{(m)}x_{qj}^{(m)},
+  \label{eq:SQAP}\\
+  & \mbox{s.t. } \mathbf{x}^{(m)}\in \mathcal{P}\cap\mathcal{I}. \notag
+\end{align}
 in which the ``flow'' matrix $f_{pq}^{(m)}$ and the ``distance'' matrix $d_{ij}$
 are defined as
 \begin{subequations}
@@ -366,16 +364,72 @@ depends only on statistical CSI.
 
 \section{Numerical Results}
 \label{sec:numerical}
- % Simulation settings
+% Simulation settings
  
- % Average uncoded BER and BER upperbounds of Non-MoDiv, Seddik, and QAP of for
- % (16) 32 (64) QAM vs d
+% Average uncoded BER and BER appxoimation of Non-MoDiv, Seddik, and QAP of for
+% 16 QAM vs noise_power
+
+% Below is an example of how to insert images. Delete the ``\vspace'' line,
+% uncomment the preceding line ``\centerline...'' and replace ``imageX.ps''
+% with a suitable PostScript file name.
+% -------------------------------------------------------------------------
+\begin{figure}[htb]
+
+  \begin{minipage}[b]{.48\linewidth}
+    \centering
+    \centerline{\includegraphics[width=4.5cm]{./figs/BER_noise_power_approx_16QAM.eps}}
+    \centerline{(a) Approximated}\medskip
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.48\linewidth}
+    \centering
+    \centerline{\includegraphics[width=4.5cm]{./figs/BER_noise_power_MonteCarlo_16QAM.eps}}
+    \centerline{(b) Monte-Carlo}\medskip
+  \end{minipage}
+  %
+  \caption{Uncoded BER vs the noise power for 16-QAM.}
+  \label{fig:uncoded_noisepower}
+%
+\end{figure}
  
- % Coded BER for 16, (32), 64 QAM for Non-MoDiv, Seddik, and QAP in one graph, M
- % = 3
- 
-  % Coded BER for 16, (32), 64 QAM for Non-MoDiv, Seddik, and QAP in one graph, M
- % = 4
+% Average uncoded BER and BER appxoimation of Non-MoDiv, Seddik, and QAP of for
+% 16 QAM vs d
+\begin{figure}[htb]
+
+  \begin{minipage}[b]{.48\linewidth}
+    \centering
+    \centerline{\includegraphics[width=4.5cm]{./figs/BER_distance_approx_16QAM.eps}}
+    \centerline{(a) Approximated}\medskip
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.48\linewidth}
+    \centering
+    \centerline{\includegraphics[width=4.5cm]{./figs/BER_distance_MonteCarlo_16QAM.eps}}
+    \centerline{(b) Monte-Carlo}\medskip
+  \end{minipage}
+  %
+  \caption{Uncoded BER vs the position of the relay node for 16-QAM.}
+  \label{fig:uncoded_position}
+%
+\end{figure}
+
+% Coded BER for 16QAM for Non-MoDiv, Seddik, and QAP in one graph, M
+% = 3, 4
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=\columnwidth]{./figs/waterfall_16QAM.eps}
+  \caption{Coded BER for 16-QAM.}
+  \label{fig:coded_16QAM}
+\end{figure}
+
+% Coded BER for 64QAM for Non-MoDiv, Seddik, and QAP in one graph, M
+% = 3, 4
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=\columnwidth]{./figs/waterfall_64QAM.eps}
+  \caption{Coded BER for 64-QAM.}
+  \label{fig:coded_64QAM}
+\end{figure}
 
 \section{Conclusion}
 \label{sec:conclusion}
