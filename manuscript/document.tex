@@ -50,14 +50,14 @@
 \begin{abstract}
   % (what we do)
   As a practical transmission enhancement technique for relay and HARQ system,
-  Modulation Diversity (MoDiv) uses distinct mappings to the same constellation
-  for different (re)transmissions. 
+  Modulation Diversity (MoDiv) uses distinct mappings from information bits to
+  the same constellation for different (re)transmissions. 
   % (how they do)
   % (how we do)
   In this work, we study the MoDiv optimization
   in a amplify-and-forward (AF) two-way relay channel (TWRC). The design of
-  MoDiv to minimize the bit-error rate (BER) is formulated into a successive
-  Koopmans-Beckmann Quadratic Assignment Problem (QAP), which is solved
+  MoDiv design to minimize the bit-error rate (BER) is formulated into a
+  successive Koopmans-Beckmann Quadratic Assignment Problem (QAP), which is solved
   sequatially with a robust taboo search method.
   % (main results)
   The performance gain of our MoDiv scheme over retransmission without remapping
@@ -75,32 +75,31 @@
 % then two-way relay
 As an advanced technique to improve the robustness of high-rate wireless
 transmissions against poor channel conditions, Hybrid Automatic Repeat reQuest
-(HARQ) has found its application in various communication
+(HARQ) has been widely adopted in various communication
 systems~\cite{cripriano2010overview}. HARQ works on both PHY layer and MAC
 sublayer to mitigate packet loss due to channel fading and
-link-adaptation accuracy. Recently, substantial research interest
-has been drawn to HARQ in two-way relay channel
-(TWRC) [2-4].
-In~\cite{iannello2009throughput}, the average throughput of naive Type-I HARQ
-policy for both Amplify and Forward (AF) and Decode and Forward (RF) TWRC schemes have
-been analyzed. The energy-delay tradeoff, and the diversity-multiplexing
+link-adaptation accuracy. Recently, there has been some research interests in
+applying HARQ over two-way relay channel (TWRC) [2-4].
+In~\cite{iannello2009throughput}, the average throughput of a simple Type-I HARQ
+policy for both Amplify-and-Forward (AF) and Decode-and-Forward (DF) TWRC
+schemes have been analyzed. The energy-delay tradeoff, and the diversity-multiplexing
 tradeoff of type-II HARQ policy, also known as full Incremental Redundancy (IR),
 for AF TWRC scheme have been studied in~\cite{choi2013energy}
-and~\cite{xu2014diversity}, respectively. Related works about TWRC with ARQ
+and~\cite{xu2014diversity}, respectively. Related works on TWRC with ARQ
 for different relay schemes and retransmission policies can also be
 found in~\cite{popovski2007wireless, chen2012arq, guan2015twoway} and the references therein.
 
 % Literature review on MoDiv for HARQ-CC
-Apart from the naive Type-I HARQ and HARQ-IR, Type-I HARQ with maximal ratio
+Apart from Type-I HARQ and HARQ-IR, Type-I HARQ with maximal ratio
 combining (MRC), also known as HARQ-Chase Combining
-(HARQ-CC)~\cite{chase1985code}, is another simple and practical HARQ
+(HARQ-CC)~\cite{chase1985code}, is another simple and effective HARQ
 scheme supported by such standands as HSPA~\cite{TS25.308},
-LTE~\cite{sesia2009lte} and so forth. As practical transmissions often admit
+LTE~\cite{sesia2009lte}, among others. As practical transmissions often admit
 linear modulations of finite-alphabet constellation (e.g. Q-ary QAM), the
 performance of HARQ-CC can be improved with Modulation Diversity
-(MoDiv)~\cite{benelli1992new}, in which a same group of $\log_2Q$ bits are
-mapped to different symbols in a same constellation in different round of
-(re)transmissions. MoDiv has been studied for
+(MoDiv)~\cite{benelli1992new}, in which a same group of $\log_2Q$
+information bits are mapped to different symbols in a same constellation in
+different round of (re)transmissions. MoDiv has been studied for
 HARQ~\cite{harvind2005symbol}, relay
 networks~\cite{seddik2008trans, khormuji2008rate} and relay-HARQ
 systems~\cite{kim2009design, ryu2011ber}.
@@ -108,7 +107,7 @@ systems~\cite{kim2009design, ryu2011ber}.
 % What we are studying
 In this paper, we study the MoDiv design for the TWRC under a simple AF scheme
 and HARQ-CC protocol. We first derive an approximation for the uncoded bit-error
-rate (BER) of TWRC-AF channel under the Rayleigh fading condition, given $M$
+rate (BER) of TWRC-AF channel under Rayleigh fading channel condition, given $M$
 different mapping schemes corresponding to each (re)transmission. Based on this
 approximation, we formulate a successive BER minimization MoDiv design into a
 series of Quadratic Assignment Problem (QAP) in Koopmans-Beckmann (KB)
@@ -120,7 +119,7 @@ algorithm~\cite{taillard1991robust} to solve each QAP in our formulation. Moreov
 successive manner based on the solution to the preceding QAP problem. Our
 numerical results demonstrate significant BER reduction over both non-MoDiv and
 a simple heuristic MoDiv retransmission scheme for 16-QAM and 64-QAM
-constellation, even under mismatching design parameters.
+constellations, even under mismatched design parameters.
 
 % Structure of the manuscript
 The paper is organized as follows. Section~\ref{sec:model} introduces the
@@ -142,12 +141,12 @@ concludes the paper.
 
 % Two-way relay channel
 Consider a TWRC with analog network coding (ANC) protocol~\cite{choi2013energy}, 
-a generalization the AF protocol, as shown in Fig.~\ref{fig:model}. the relay
+a generalization the AF protocol, as shown in Fig.~\ref{fig:model}. The relay
 node $R$ is totally unaware of the HARQ procedure and simply performs ANC. Each round of ANC
-transmission is composed of two phases. In the multiple access (MAC) phase, the
+transmission consists of two phases. In the multiple access (MAC) phase, the
 two source nodes $S_1$ and $S_2$ transmit to $R$ simultaneously. In the
-broadcast (BC) phase, $R$ amplify and broadcast the signal received during the
-MAC phase to both $S_1$ and $S_2$.
+broadcast (BC) phase, node $R$ amplifies and broadcasts the signal received
+during the MAC phase to both $S_1$ and $S_2$.
 Denote the uplink channel from $S_s$ to $R$ and downlink channel from $R$ to
 $S_s$ as $h_s$ and $g_s$, respectively, where $s=1,2$. We assume that all
 the channels follow Rayleigh distribution, i.e.
@@ -186,7 +185,7 @@ $\log_2Q$ into symbols with Gray mapping $\psi_0:\{0,\ldots,Q - 1\}\rightarrow
 is that, during the $m$-th retransmission, $S_1$ is allowed to use a
 mapping function $\psi_m\not=\psi_0$ to remap the same label $p$. We assume
 $m \leq M$ where $M$ is the maximum number of retransmissions. According to
-Eq.~(\ref{eq:y_R})(\ref{eq:y_s}), the signal received by $S_2$ after SIC during
+Eqs.~(\ref{eq:y_R})(\ref{eq:y_s}), the signal received by $S_2$ after SIC during
 the $m$-th (re)transmission of $p$ is
 \begin{equation}
   y_2^{(m)} = \alpha^{(m)} g_2^{(m)}h_1^{(m)}\psi_m[p] +
@@ -237,7 +236,7 @@ transmission of $p$. From Eq.~(\ref{eq:ml}), we have
 where $\gamma_2^{(k)} = \|g_2^{(k)}\|^2$, $\delta_1^{(k)} = \|h_1^{(k)}\|^2$
 , $\epsilon_k[p,q] = \|\psi_k[p]-\psi_k[q]\|^2$, and $(\tilde{\sigma}_2^{(k)})^2
 = \sigma_2^2+(\alpha^{(k)})^2\sigma_R^2\gamma_2^{(k)}$ is the instantaneous
-variance of the noise received by $S_2$. By addopting the Chernoff upper bound
+variance of the noise received by $S_2$. By adopting the Chernoff upper bound
 $Q(x)\leq e^{-x^2/2}/2$~\cite{proakisdigital}, an approximation to
 $P_{PEP}^{(m)}(q|p)$ is
 \begin{align}
@@ -248,7 +247,7 @@ $P_{PEP}^{(m)}(q|p)$ is
   \right)\right].
   \label{eq:PEP_m_approx}
 \end{align}
-Although the Chernoff bound is a rather rough appoximation, it
+Although the Chernoff bound is a rather coarse appoximation, it
 enables efficient iterative computation of $P_{PEP}^{(m)}(q|p)$ as $m$ varies.
 Moreover, as shown in Section~\ref{ssec:qap}, this approximation results in a
 simple KB-form QAP. Nevertheless, the Chernoff bound can be replaced
@@ -336,8 +335,9 @@ are defined as
   \end{align}
 \end{subequations}
 Note that here we assume all channel and noises to be stationary across all
-retransmissions, so $d_{ij}$ only needs to be evaluated once. On the other hand,
-$f_{pq}^{(m)}$ can be computed recursively along solving the S-QAP, since
+retransmissions, such that $d_{ij}$ only needs to be evaluated once. On the
+other hand, $f_{pq}^{(m)}$ can be computed recursively while solving the S-QAP,
+since
 \begin{subequations}
   \begin{align}
     \tilde{P}_{PEP}^{(m)}(q|p) & = \sum_{i=0}^{Q-1}
@@ -350,7 +350,7 @@ where $\hat{\mathbf{x}}^{(m)}$ is the solution to Eq.(\ref{eq:SQAP}).
 
 % Solution via Tabu search
 In our S-QAP fromulation, each KB-form QAP is defined with two $Q$-by-$Q$
-matrices, and only one of them needs to be updated. Should we adopt the more
+matrices, only one of which needs to be updated. Should we adopt the more
 accurate approximation~\cite{chiani2003new} in Eq.(\ref{eq:PEP_m}), each QAP
 would be in general-form which is defined with one $Q^4$ matrix. Although this
 4-dimensional matrix can still be updated iteratively using a few
@@ -358,7 +358,7 @@ $Q$-by-$Q$ matrices in a sequential manner, the solution to the general-form QAP
 is ususally more complicated. With the S-QAP in KB form, we are able
 to handle much larger constellation with an efficient robust taboo search
 algorithm~\cite{taillard1991robust}. Other numerical approaches to
-solve KB-QAP include simulated anneling (SA)~\cite{connolly1990improved},
+solve KB-QAP include simulated annealing (SA)~\cite{connolly1990improved},
 ant-colony~\cite{gambardella1999ant} and so forth. Finally, we note that the
 MoDiv design can be precomputed offline and stored in $S_1$ and $S_2$ as it
 depends only on statistical CSI.
