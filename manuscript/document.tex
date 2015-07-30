@@ -695,6 +695,26 @@ evaluated as follows:
 \begin{proof}
   See Appendix.
 \end{proof}
+While $E_k[p,q]$ plays a key role in our MoDiv design based on BER minimization,
+we comment that it is also closely related to another performance metric, the
+ergodic mutual information (EMI), via the following proposition. 
+\begin{proposition}
+  The EMI after the $m$-th retransmission,
+  denoted as $I^{(m)}$, is lower bounded by
+  \begin{align}
+    \tilde{I}^{(m)} = \log_2Q -
+    \log_2\left[ \frac{1}{Q}　\sum_{p=0}^{Q-1}\sum_{q=0}^{Q-1}
+    \prod_{k=0}^{m}E_k[p,q] \right].
+  \end{align}
+  \label{prop:EMI}
+\end{proposition}
+\begin{proof}
+  See Appendix.
+\end{proof}
+Proposition 2 bridges MoDiv design based on rate criterion ~\cite{}
+and BER criterion~\cite{}. Moreover, it leads to an efficient KB-form QAP almost
+identical to that derived from the BER minimization, as will be explained in
+Section~\ref{ssec:qap}.
 % Recursion of the approximated PEP
 
 \subsection{The Successive Quadratic Assignment Problem}
@@ -716,8 +736,8 @@ Eq.(\ref{eq:P_BER}) evaluated with Eq.(\ref{eq:PEP_m_approx})(\ref{eq:E_k}).
 % Successively approximated BER minimization in SQAP form
 In order to rewrite Eq.(\ref{eq:core}) into a S-QAP formulation, we
 denote $\mathbf{x}^{(m)} = \{x_{pi}^{(m)}|p,i=0,\ldots,Q-1\}$ as the
-permutation matrix representing $\psi_m$, in which $x_{pi}^{(m)} = I(\psi_m[p] =
-\psi_0[i])$ and $I(\cdot)$ is the indicator function. Denote the constraint sets
+permutation matrix representing $\psi_m$, in which $x_{pi}^{(m)} = 1(\psi_m[p] =
+\psi_0[i])$ and $1(\cdot)$ is the indicator function. Denote the constraint sets
 \begin{subequations}
   \begin{align}
     \mathcal{P} & = \left\{\mathbf{x}:\,\sum_{p=0}^{Q-1}x_{pi} = 1,
@@ -738,7 +758,7 @@ in which the ``flow'' matrix $f_{pq}^{(m)}$ and the ``distance'' matrix $d_{ij}$
 are defined as
 \begin{align}
   f_{pq}^{(m)} = \frac{B[p,q]}{Q}\tilde{P}_{PEP}^{(m-1)}(q|p),\; d_{ij} =
-  \tilde{E}_0[i,j]
+  \tilde{E}_0[i,j] \label{eq:fd}
 \end{align}
 
 Note that here we assume all channel and noises to be stationary across all
@@ -762,11 +782,19 @@ accurate approximation~\cite{chiani2003new} in Eq.(\ref{eq:PEP_m}), each QAP
 would be in general-form which is defined with one $Q^4$ matrix. Although this
 4-dimensional matrix can still be updated iteratively using a few
 $Q$-by-$Q$ matrices in a sequential manner, the solution to the general-form QAP
-is ususally more complicated. With the S-QAP in KB form, we are able
-to handle much larger constellation with an efficient robust tabu search
-algorithm~\cite{taillard1991robust}. The tabu search heuristic
-yields slight overestimates or upper bounds of the optimal objective values. To
-shed some light on this we computed the lower bounds based an semidefinite
+is ususally more complicated. On the other hand, if we adopted a EMI-lowerbound
+maximization design philosophy according to Proposition~\ref{prop:EMI}, the only
+change to the KB-form S-QAP would be a new ``flow'' matrix $f_{pq}^{*(m)} =
+\tilde{P}_{PEP}^{(m-1)}(q|p)$ in Eq.(\ref{eq:fd}). Nevertheless, in terms of
+practical performance measurement such as coded BER, the approximated
+EMI-lowerbound is generally an inferior criterion than the approximated
+BER-upperbound.
+
+With the S-QAP in KB form, we are able
+to handle larger constellations than examined in previous works with an
+efficient robust tabu search algorithm~\cite{taillard1991robust}. The tabu
+search heuristic yields slight overestimates or upper bounds of the optimal
+objective values. To shed some light on this we computed the lower bounds based an semidefinite
 programming relaxations as in~\cite{wu2011computation}. Typically the gap
 between lower and upper bounds is on the order of 10-20\% with the exact
 objective value being much closer to the upper bound.Finally, we note that the
@@ -824,9 +852,10 @@ frames. Since an important motivation of HARQ is to adopt for link adaptation
 inaccuracies~\cite{cheng2006coding}, we deliberately optimize the remappings at
 $\sigma^2=0dB$ for 16-QAM and $\sigma^2=4.5dB$ for 64-QAM and test their performances on
 mismatching $\sigma^2$. Again we fix $d_1=d_2=0.5$. The results are shown in
-Fig.~\ref{fig:coded_16QAM} and Fig.~\ref{fig:coded_64QAM}. Apparently, the QAP scheme offers larger performance gain for higher-order constellation. Specifically, even under
-design mismatch, QAP2 achieves a equal or better performance than NM3 and GS3
-for 64-QAM constellation.
+Fig.~\ref{fig:coded_16QAM} and Fig.~\ref{fig:coded_64QAM}. Apparently, the QAP
+scheme offers larger performance gain for higher-order constellation.
+Specifically, even under design mismatch, QAP2 achieves a equal or better
+performance than NM3 and GS3 for 64-QAM constellation.
 
 % Coded BER for 16QAM for Non-MoDiv, Seddik, and QAP in one graph, M
 % = 3, 4
@@ -953,8 +982,24 @@ scheme under various settings and was robust against mismatched design parameter
 
 
 % if have a single appendix:
-\appendix[Proof of Proposition 1]
-\label{sec:append}
+%\appendix[]
+
+% or
+%\appendix  % for no appendix heading
+% do not use \section anymore after \appendix, only \section*
+% is possibly needed
+
+% use appendices with more than one appendix
+% then use \section to start each appendix
+% you must declare a \section before using any
+% \subsection or using \label (\appendices by itself
+% starts a section numbered zero.)
+%
+
+
+\appendices
+\section{Proof of Proposition~\ref{prop:E_k}}
+\label{sec:appenda}
 The proof of Proposition~\ref{prop:E_k} is generally based on Eq.(43)
 of~\cite{han2009performance}. Firstly, by adopting the heuristic approximation
 in~\cite{jing2006distributed}, the random variable $\alpha^{(k)}$ is replaced
@@ -979,21 +1024,31 @@ with constant $\tilde{\alpha}$ in $E_k[p, q]$, then we have
 As $\delta_1,\gamma_2$ both follow exponential distribution,
 Eq.(\ref{eq:E_k}) is derived by evaluating Eq.(\ref{eq:ekpq_approx}) with
 Eq.(3.352.4) of~\cite{zwillinger2014table}.
-% or
-%\appendix  % for no appendix heading
-% do not use \section anymore after \appendix, only \section*
-% is possibly needed
-
-% use appendices with more than one appendix
-% then use \section to start each appendix
-% you must declare a \section before using any
-% \subsection or using \label (\appendices by itself
-% starts a section numbered zero.)
-%
 
 
-%\appendices
-%\section{Proof of the First Zonklar Equation}
+\section{Proof of Proposition~\ref{prop:EMI}}
+\label{sec:appendb}
+Denote the mutual information conditioned on the channel state
+informations as $I^{(m)}(\mathbf{h}_1^{(m)}, \mathbf{g}_2^{(m)},
+\bm{\alpha}^{(m)})$, where $\mathbf{h}_1^{(m)} =
+[h_1^{(0)},\ldots,h_1^{(m)}]^T$, $\mathbf{g}_2^{(m)} =
+[g_2^{(0)},\ldots,g_2^{(m)}]^T$ and $\bm{\alpha}^{(m)} =
+[\alpha^{(0)},\ldots,\alpha^{(m)}]^T$. By assuming a
+uniform distribution of all constellation symbols, $I^{(m)}(\mathbf{h}_1^{(m)},
+\mathbf{g}_2^{(m)}, \bm{\alpha}^{(m)})$ is lower bounded with~\cite[Eq.(4.3.37)]{}:
+\begin{align}
+  & \tilde{I}^{(m)}(\mathbf{h}_1^{(m)}, \mathbf{g}_2^{(m)},
+  \bm{\alpha}^{(m)}) = \log_2Q -　\notag \\
+  & \log_2\left[\frac{1}{Q}　\sum_{p=0}^{Q-1}\sum_{q=0}^{Q-1}
+  \prod_{k=0}^{m}\exp\left(-
+  \frac{(\alpha^{(k)})^2\epsilon_k[p,q]\gamma_2^{(k)}\delta_1^{(k)}}
+  {4(\tilde{\sigma}_2^{(k)})^2} \right) \right].
+\end{align}
+Noting that $\log(x)$ is a concave function
+and the channels are assumed independent across each round of
+(re)transmissions, we have $\mathbb{E}\left[\tilde{I}^{(m)}(\mathbf{h}_1^{(m)},
+\mathbf{g}_2^{(m)}, \bm{\alpha}^{(m)})\right] \geq \tilde{I}^{(m)}$, thus
+Proposition~\ref{prop:EMI} is proved.
 %Appendix one text goes here.
 
 % you can choose not to have a title for an appendix
