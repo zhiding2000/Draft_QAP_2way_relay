@@ -704,7 +704,8 @@ Our MoDiv design is based on the approximated BER minimization criterion. As it
 is impossible to know the number of actual retransmission $m$ in advance, we
 formulate a sequence of $M$ optimization problems as
 in~\cite{harvind2005symbol}, in which $\psi_m$ is optimized to minimize the
-approximated BER given $\psi_1,\ldots,\psi_{m-1}$ without expecting future retransmissions. The
+approximated BER given $\psi_1,\ldots,\psi_{m-1}$ without expecting future
+retransmissions:
 \begin{align}
   \min_{\psi^{(m)}|\psi^{(k)},k=0,\ldots,m-1}\tilde{P}_{BER}^{(m)},\,m=1,\ldots,M
   \label{eq:core}
@@ -715,14 +716,8 @@ Eq.(\ref{eq:P_BER}) evaluated with Eq.(\ref{eq:PEP_m_approx})(\ref{eq:E_k}).
 % Successively approximated BER minimization in SQAP form
 In order to rewrite Eq.(\ref{eq:core}) into a S-QAP formulation, we
 denote $\mathbf{x}^{(m)} = \{x_{pi}^{(m)}|p,i=0,\ldots,Q-1\}$ as the
-permutation matrix representing $\psi_m$:
-\begin{align}
-  x_{pi}^{(m)} = \left\{\begin{array}{ll}
-        1,& \mbox{if $\psi_m[p] = \psi_0[i]$}\\
-        0,& \mbox{otherwise.} 
-   \end{array} \right.
-\end{align}
-Denote the constraint sets
+permutation matrix representing $\psi_m$, in which $x_{pi}^{(m)} = I(\psi_m[p] =
+\psi_0[i])$ and $I(\cdot)$ is the indicator function. Denote the constraint sets
 \begin{subequations}
   \begin{align}
     \mathcal{P} & = \left\{\mathbf{x}:\,\sum_{p=0}^{Q-1}x_{pi} = 1,
@@ -735,19 +730,17 @@ Denote the constraint sets
 Then the MoDiv design problems in Eq.(\ref{eq:core}) can be formulated into a
 S-QAP as follows:
 \begin{align}
-  & \min_{\mathbf{x}^{(m)}}\sum_{p=0}^{Q-1}\sum_{i=0}^{Q-1}
-  \sum_{q=0}^{Q-1}\sum_{j=0}^{Q-1}f_{pq}^{(m)}d_{ij}x_{pi}^{(m)}x_{qj}^{(m)},
-  \label{eq:SQAP}\\
-  & \mbox{s.t. } \mathbf{x}^{(m)}\in \mathcal{P}\cap\mathcal{I}. \notag
+  \min_{\mathbf{x}^{(m)}\in \mathcal{P}\cap\mathcal{I}}
+  \sum_{p=0}^{Q-1}\sum_{i=0}^{Q-1}
+  \sum_{q=0}^{Q-1}\sum_{j=0}^{Q-1}f_{pq}^{(m)}d_{ij}x_{pi}^{(m)}x_{qj}^{(m)}, \label{eq:SQAP}
 \end{align}
 in which the ``flow'' matrix $f_{pq}^{(m)}$ and the ``distance'' matrix $d_{ij}$
 are defined as
-\begin{subequations}
-  \begin{align}
-    f_{pq}^{(m)} & = \frac{B[p,q]}{Q}\tilde{P}_{PEP}^{(m-1)}(q|p) \\
-    d_{ij}  & = \tilde{E}_0[i,j]
-  \end{align}
-\end{subequations}
+\begin{align}
+  f_{pq}^{(m)} = \frac{B[p,q]}{Q}\tilde{P}_{PEP}^{(m-1)}(q|p),\; d_{ij} =
+  \tilde{E}_0[i,j]
+\end{align}
+
 Note that here we assume all channel and noises to be stationary across all
 retransmissions, such that $d_{ij}$ only needs to be evaluated once. On the
 other hand, $f_{pq}^{(m)}$ can be computed recursively while solving the S-QAP,
@@ -771,9 +764,7 @@ would be in general-form which is defined with one $Q^4$ matrix. Although this
 $Q$-by-$Q$ matrices in a sequential manner, the solution to the general-form QAP
 is ususally more complicated. With the S-QAP in KB form, we are able
 to handle much larger constellation with an efficient robust tabu search
-algorithm~\cite{taillard1991robust}. Other numerical approaches to
-solve KB-QAP include simulated annealing (SA)~\cite{connolly1990improved},
-ant-colony~\cite{gambardella1999ant} and so forth. The tabu search heuristic
+algorithm~\cite{taillard1991robust}. The tabu search heuristic
 yields slight overestimates or upper bounds of the optimal objective values. To
 shed some light on this we computed the lower bounds based an semidefinite
 programming relaxations as in~\cite{wu2011computation}. Typically the gap
@@ -791,22 +782,23 @@ the path-loss coefficient. We also fix $P_1=P_2=0.5P_R=1$ and assume that
 $\sigma_1^2 = \sigma_2^2=\sigma_R^2 = \sigma^2$. In the HARQ protocol, we
 select $M=3$. For the $m$-th
 retransmission, we compare the performance of three MoDiv strategies: the simple
-repeated retransmission without MoDiv (NM$m$), our QAP-optimized solution
-(QAP$m$), and a heuristic MoDiv scheme where Gray-mapping and Seddik's heuristic
+repeated retransmission without MoDiv, our QAP-optimized solution, and a
+heuristic MoDiv scheme where Gray-mapping and Seddik's heuristic
 re-mapping~\cite{seddik2008trans} are used alternatingly for each
-(re)transmission (GS$m$).
+(re)transmission (GS$m$). In our simulation results, the performance of the
+above three schemes after the $m$-th retransmission are labeled as NM$m$, QAP$m$
+and GS$m$, respectively and that of the original transmission using Gray mapping
+is labeled as TR0.
 
 % Average uncoded BER and BER appxoimation of Non-MoDiv, Seddik, and QAP of for
 % 64 QAM vs noise_power and d1
 Firstly, we demonstrate the approximated and the Monte-Carlo simulated
-total uncoded BER results of $S_1$ and $S_2$ for 64-QAM constellation. In
+uncoded BER results of $S_1$ and $S_2$ for 64-QAM constellation. In
 Fig.~\ref{fig:uncoded_noisepower}, we fix $d_1=d_2=0.5$ and plot the uncoded BER
-against varying $\sigma_2$. In Fig.~\ref{fig:uncoded_position} by fixing
-$\sigma^2=-12$dB and $d_1+d_2=1$ plot the uncoded BER against varying $d_1$. The
-original transmission is labeled as TR0. For the 1st retransmission, both the
-the QAP and the heuristic GS MoDiv offers about the same performance gap over NM
-scheme. As $m$ increases, both the gap between GS and NM as well as that
-between QAP and GS widens under various channel conditions.
+against varying $\sigma^2$. For the
+first retransmission, both the the QAP and the heuristic GS MoDiv offers about
+the same performance gap over NM scheme. However, as $m$ increases, both the gap
+between GS and NM as well as that between QAP and GS widens.
 
 \begin{figure}[htb]
   \begin{minipage}[b]{.48\linewidth}
@@ -822,22 +814,6 @@ between QAP and GS widens under various channel conditions.
   \end{minipage}
   \caption{Uncoded BER vs $\sigma^2$ for 64-QAM.}
   \label{fig:uncoded_noisepower}
-\end{figure}
-
-\begin{figure}[htb]
-  \begin{minipage}[b]{.48\linewidth}
-    \centering
-    \centerline{\includegraphics[width=4.5cm]{./figs/BER_distance_approx_64QAM.eps}}
-    \centerline{(a) Approximated}\medskip
-  \end{minipage}
-  \hfill
-  \begin{minipage}[b]{0.48\linewidth}
-    \centering
-    \centerline{\includegraphics[width=4.5cm]{./figs/BER_distance_MonteCarlo_64QAM.eps}}
-    \centerline{(b) Monte-Carlo}\medskip
-  \end{minipage}
-  \caption{Uncoded BER vs $d_1$ for 64-QAM.}
-  \label{fig:uncoded_position}
 \end{figure}
 
 To further verify the performance gain and robustness of the
@@ -875,11 +851,11 @@ for 64-QAM constellation.
 In this work, we investigated the modulation diversity (MoDiv) design for
 Chase Combining (CC) HARQ in amplify and forward (AF) two-way relay channel
 (TWRC). With the objective of minimizing an approximated
-bit error rate (BER), the MoDiv design was formulated into a successive Koopmans-
-Beckmann Quadratic Assignment Problem (QAP) and solved with a robust taboo
-search algorithm. Our numerical tests demonstrated that the QAP-optimized MoDiv
-outperformed simple repeated use of Gray mapping and a heuristic MoDiv scheme
-under various settings and was robust against mismatched design parameters.
+bit error rate (BER), the MoDiv design was formulated into a successive
+Koopmans-Beckmann Quadratic Assignment Problem (QAP) and solved with a robust
+taboo search algorithm. Our numerical tests demonstrated that the QAP-optimized
+MoDiv outperformed simple repeated use of Gray mapping and a heuristic MoDiv
+scheme under various settings and was robust against mismatched design parameters.
 % An example of a floating figure using the graphicx package.
 % Note that \label must occur AFTER (or within) \caption.
 % For figures, \caption should occur after the \includegraphics.
@@ -998,11 +974,11 @@ with constant $\tilde{\alpha}$ in $E_k[p, q]$, then we have
   \left[
   \left(1 + \frac{\tilde{\alpha}^2\epsilon_k[p,q]\beta_{h_1}\gamma_2 }
   {4(\sigma_2^2+\tilde{\alpha}^2\sigma_R^2\gamma_2)}\right)^{-1}
-  \right].
+  \right]. \label{eq:ekpq_approx}
 \end{align}
 As $\delta_1,\gamma_2$ both follow exponential distribution,
-Eq.(\ref{eq:E_k}) is derived by evaluating the above expectation with Eq.(3.352.4)
-of~\cite{zwillinger2014table}.
+Eq.(\ref{eq:E_k}) is derived by evaluating Eq.(\ref{eq:ekpq_approx}) with
+Eq.(3.352.4) of~\cite{zwillinger2014table}.
 % or
 %\appendix  % for no appendix heading
 % do not use \section anymore after \appendix, only \section*
