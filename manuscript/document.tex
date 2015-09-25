@@ -711,10 +711,10 @@ ergodic mutual information (EMI), via the following proposition.
 \begin{proof}
   See Appendix.
 \end{proof}
-Proposition 2 bridges MoDiv design based on rate criterion ~\cite{}
-and BER criterion~\cite{}. Moreover, it leads to an efficient KB-form QAP almost
-identical to that derived from the BER minimization, as will be explained in
-Section~\ref{ssec:qap}.
+Proposition 2 bridges MoDiv design based on rate
+criterion~\cite{khormuji2008rate} and BER criterion~\cite{harvind2005symbol}.
+Moreover, it leads to an efficient KB-form QAP almost identical to that derived
+from the BER minimization, as will be explained in Section~\ref{ssec:qap}.
 % Recursion of the approximated PEP
 
 \subsection{The Successive Quadratic Assignment Problem}
@@ -804,75 +804,115 @@ statistical CSI.
 \section{Numerical Results}
 \label{sec:numerical}
 % Simulation settings
-In our simulation, we consider a TWRC where the distance from $S_s$ to the relay
-is $d_s$, $s=1,2$, thus $\beta_{h_s} = \beta_{g_s} = d_s^{\nu}$ where $\nu=3$ is
-the path-loss coefficient. We also fix $P_1=P_2=0.5P_R=1$ and assume that
-$\sigma_1^2 = \sigma_2^2=\sigma_R^2 = \sigma^2$. In the HARQ protocol, we
-select $M=3$. For the $m$-th
+In our simulation, we consider a TWRC where the distance from $S_1$, $S_2$ to
+the relay are $d_1=d_2=0.5$, thus $\beta_{h_s} = \beta_{g_s} =
+d_s^{\nu}$ where $\nu=3$ is the path-loss coefficient, $s=1,2$. We also fix
+$P_1=P_2=0.5P_R=1$ and assume that $\sigma_1^2 = \sigma_2^2=\sigma_R^2 =
+\sigma^2$. In the HARQ protocol, we select $M=4$. For the $m$-th
 retransmission, we compare the performance of three MoDiv strategies: the simple
 repeated retransmission without MoDiv, our QAP-optimized solution, and a
-heuristic MoDiv scheme where Gray-mapping and Seddik's heuristic
-re-mapping~\cite{seddik2008trans} are used alternatingly for each
-(re)transmission (GS$m$). In our simulation results, the performance of the
-above three schemes after the $m$-th retransmission are labeled as NM$m$, QAP$m$
-and GS$m$, respectively and that of the original transmission using Gray mapping
-is labeled as TR0.
+heuristic constellation rearrangement (CoRe) scheme proposed
+for HSDPA~\cite{panasonic2001enhanced}. In our simulation results, the
+performance of the above three schemes after the $m$-th retransmission are
+labeled as NM$m$, QAP$m$ and CR$m$, respectively.
 
 % Average uncoded BER and BER appxoimation of Non-MoDiv, Seddik, and QAP of for
 % 64 QAM vs noise_power and d1
 Firstly, we demonstrate the approximated and the Monte-Carlo simulated
-uncoded BER results of $S_1$ and $S_2$ for 64-QAM constellation. In
-Fig.~\ref{fig:uncoded_noisepower}, we fix $d_1=d_2=0.5$ and plot the uncoded BER
-against varying $\sigma^2$. For the
-first retransmission, both the the QAP and the heuristic GS MoDiv offers about
-the same performance gap over NM scheme. However, as $m$ increases, both the gap
-between GS and NM as well as that between QAP and GS widens.
+uncoded BER results of $S_1$ and $S_2$ for 64-QAM constellation in
+Fig.~\ref{fig:uncoded_noisepower_approx} and
+Fig.~\ref{fig:uncoded_noisepower_mc}, respectively.
+In the approximated BER results, for comparison
+purpose we also plot the Gilmore-Lawler bound of the QAP~\cite{li1994lower},
+denoted as GLB$m$. These results indicate that the QAP solution offers a
+substantial performance gain over non-MoDiv scheme and the heuristic CoRe
+scheme. For instance, with QAP MoDiv design, 3 retransmissions achieves lower
+BER than 4 retransmissions using the heuristic CoRe scheme (in high SNR regime),
+and 2 retransmissions outperforms 4 retransmissions without MoDiv.
 
 \begin{figure}[htb]
   \begin{minipage}[b]{.48\linewidth}
     \centering
-    \centerline{\includegraphics[width=4.5cm]{./figs/BER_noise_power_approx_64QAM.eps}}
-    \centerline{(a) Approximated}\medskip
+    \centerline{\includegraphics[width=4.5cm]{./figs/BER_noise_power_upperbound_64QAM_23.eps}}
+    \centerline{(a) $m=1,2$}\medskip
   \end{minipage}
   \hfill
   \begin{minipage}[b]{0.48\linewidth}
     \centering
-    \centerline{\includegraphics[width=4.5cm]{./figs/BER_noise_power_MonteCarlo_64QAM.eps}}
-    \centerline{(b) Monte-Carlo}\medskip
+    \centerline{\includegraphics[width=4.5cm]{./figs/BER_noise_power_upperbound_64QAM_45.eps}}
+    \centerline{(b) $m=3,4$}\medskip
   \end{minipage}
-  \caption{Uncoded BER vs $\sigma^2$ for 64-QAM.}
-  \label{fig:uncoded_noisepower}
+  \caption{The approximated uncoded BER.}
+  \label{fig:uncoded_noisepower_approx}
+\end{figure}
+
+\begin{figure}[htb]
+  \begin{minipage}[b]{.48\linewidth}
+    \centering
+    \centerline{\includegraphics[width=4.5cm]{./figs/BER_noise_power_MonteCarlo_64QAM_23.eps}}
+    \centerline{(a) $m=1,2$}\medskip
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.48\linewidth}
+    \centering
+    \centerline{\includegraphics[width=4.5cm]{./figs/BER_noise_power_MonteCarlo_64QAM_45.eps}}
+    \centerline{(b) $m=3,4$}\medskip
+  \end{minipage}
+  \caption{The Monte-Carlo simulated uncoded BER.}
+  \label{fig:uncoded_noisepower_mc}
 \end{figure}
 
 To further verify the performance gain and robustness of the
 QAP-optimized MoDiv scheme, we compare the coded-BER of the three MoDiv schemes
-in a LDPC-coded communication system based on~\cite{hochwald2003achieving}. We
-use a LDPC code of length $L=2400$, coding rate of $3/4$ and a Monte-Carlo run of up to 2000 LDPC
-frames. Since an important motivation of HARQ is to adopt for link adaptation
-inaccuracies~\cite{cheng2006coding}, we deliberately optimize the remappings at
-$\sigma^2=0dB$ for 16-QAM and $\sigma^2=4.5dB$ for 64-QAM and test their performances on
-mismatching $\sigma^2$. Again we fix $d_1=d_2=0.5$. The results are shown in
-Fig.~\ref{fig:coded_16QAM} and Fig.~\ref{fig:coded_64QAM}. Apparently, the QAP
-scheme offers larger performance gain for higher-order constellation.
-Specifically, even under design mismatch, QAP2 achieves a equal or better
-performance than NM3 and GS3 for 64-QAM constellation.
+for 64-QAM constellation in a LDPC-coded communication system based
+on~\cite{hochwald2003achieving}.
+We use a LDPC code of length $L=2400$, coding rate of $3/4$ and a Monte-Carlo run
+of up to 2000 LDPC frames. Since an important motivation of HARQ is to adopt for
+link adaptation inaccuracies~\cite{cheng2006coding}, we deliberately optimize
+the remappings at $\sigma^2=4.5dB$ and test their performances on
+mismatching $\sigma^2$. The results are shown in
+Fig.~\ref{fig:coded_64QAM_12} and Fig.~\ref{fig:coded_64QAM_34}. Apparently,
+the advantage of QAP solution is preserved despite of mismatching. Specifically,
+QAP2 still performs better than NM4, while CR4 outperforms QAP3 by less than
+1dB.
 
 % Coded BER for 16QAM for Non-MoDiv, Seddik, and QAP in one graph, M
 % = 3, 4
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=\columnwidth]{./figs/waterfall_16QAM.eps}
-  \caption{Coded BER for 16-QAM.}
-  \label{fig:coded_16QAM}
+  \includegraphics[width=0.9\columnwidth]{./figs/waterfall_2M3M_64QAM.eps}
+  \caption{Coded BER for $m=1,2$.}
+  \label{fig:coded_64QAM_12}
 \end{figure}
 
 % Coded BER for 64QAM for Non-MoDiv, Seddik, and QAP in one graph, M
 % = 3, 4
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=\columnwidth]{./figs/waterfall_64QAM.eps}
-  \caption{Coded BER for 64-QAM.}
-  \label{fig:coded_64QAM}
+  \includegraphics[width=0.9\columnwidth]{./figs/waterfall_4M5M_64QAM.eps}
+  \caption{Coded BER for $m=3,4$.}
+  \label{fig:coded_64QAM_34}
+\end{figure}
+
+Finally, to summarize the advantage of our QAP-based MoDiv scheme, we plot the
+average HARQ throughput of the above LDPC coded system. For the 16-QAM result,
+the QAP-based MoDiv design is solved at $\sigma^2=0dB$. It appears that
+MoDiv design achieves greater performance gain for denser
+constellation, since a larger space of constellation rearrangement offers more
+opportunity to our QAP solver.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{./figs/throughput_6M_64QAM.eps}
+  \caption{Average throughput for 64-QAM.}
+  \label{fig:coded_64QAM_12}
+\end{figure}
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.9\columnwidth]{./figs/throughput_6M_16QAM.eps}
+  \caption{Average throughput for 16-QAM.}
+  \label{fig:coded_64QAM_12}
 \end{figure}
 
 \section{Conclusion}
@@ -883,8 +923,9 @@ Chase Combining (CC) HARQ in amplify and forward (AF) two-way relay channel
 bit error rate (BER), the MoDiv design was formulated into a successive
 Koopmans-Beckmann Quadratic Assignment Problem (QAP) and solved with a robust
 taboo search algorithm. Our numerical tests demonstrated that the QAP-optimized
-MoDiv outperformed simple repeated use of Gray mapping and a heuristic MoDiv
-scheme under various settings and was robust against mismatched design parameters.
+MoDiv outperformed simple repeated use of Gray mapping and a heuristic
+constellation rearrangement (CoRe) scheme under various settings and was robust
+against mismatched design parameters.
 % An example of a floating figure using the graphicx package.
 % Note that \label must occur AFTER (or within) \caption.
 % For figures, \caption should occur after the \includegraphics.
